@@ -48,8 +48,9 @@ const loadPlants = (plantId) => {
   fetch(`https://openapi.programming-hero.com/api/category/${plantId}`)
   .then(res => res.json())
   .then(data => {
-    console.log(data);
+    // console.log(data);
     showAllPlants(data.plants)
+    
   })
 
 };
@@ -58,14 +59,28 @@ const loadPlants = (plantId) => {
 
 // show-all-plants
 const showAllPlants = (plants) => {
-  plants.forEach(plant => {
+   
+ loadPlantsContainer.innerHTML = '';
+  plants.map(plant => {       
     loadPlantsContainer.innerHTML += `
 
-    <div>
-      // <img src="${plant.image}"/>
-    </div>
+     <div class="bg-white max-h-[400px] p-4 rounded-md">
+            <img class="w-full h-48 object-cover rounded-t-md" src="${plant.image}"/>
+            <h2 class="card-title font-semibold pt-3">${plant.name}</h2>
+            <p class="text-sm ">${plant.description}</p>
+            <div class="flex items-center justify-between mt-2">
+              <h3 class="text-sm bg-[#DCFCE7] py-1 px-3 rounded-full text-[#15803D] font-medium">${plant.category}</h3>
+              <h4><span class="text-sm font-semibold">৳${plant.price}</span></h4>
+            </div>
+            <div class="text-center ">
+              <button class="bg-[#15803D] w-full rounded-full text-white py-2 mt-3 mb-3">Add to Cart</button>
+            </div>
+          </div>
+
     
     `
+    
+
   })
   
 
