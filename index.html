@@ -69,13 +69,75 @@
 
 
     <!-- Choose Trees section -->
-    <!-- <section class="bg-[#F0FDF4]">
-           <div class="text-center">
-              <h1 class="text-3xl font-semibold">Choose Your Trees</h1>
-           </div>
-          <div>
+    <section class="bg-[#F0FDF4]">
+      <div class="text-center pt-24 pb-10">
+        <h1 class="text-3xl font-semibold">Choose Your Trees</h1>
+      </div>
+
+      <!-- Categories -->
+
+      <div class="w-11/12 mx-auto grid grid-cols-5 gap-7">
+
+        <!-- categories container -->
+        <div class="col-span-1">
+          <h2 class="text-xl font-semibold pb-4">Categories</h2>
+          <ul id="categoryContainer" class="font-medium">
+          </ul>
+        </div>
+
+
+        <!-- All-Plants -->
+        <div id="plantsContainer" class="col-span-3 grid-cols-3 grid gap-7">
+
+          <div class="card bg-base-100  shadow-sm">
+            <figure>
+              <img class="w-full h-48 object-cover" src="https://i.ibb.co.com/cSQdg7tf/mango-min.jpg" alt="Shoes" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">Card Title</h2>
+              <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+              <div class="card-actions justify-end">
+                <button class="btn btn-primary">Buy Now</button>
+              </div>
+            </div>
           </div>
-      </section> -->
+          <div class="card bg-base-100  shadow-sm">
+            <figure>
+              <img class="w-full h-48 object-cover" src="https://i.ibb.co.com/cSQdg7tf/mango-min.jpg" alt="Shoes" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">Card Title</h2>
+              <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+              <div class="card-actions justify-end">
+                <button class="btn btn-primary">Buy Now</button>
+              </div>
+            </div>
+          </div>
+          <div class="card bg-base-100  shadow-sm">
+            <figure>
+              <img class="w-full h-48 object-cover" src="https://i.ibb.co.com/cSQdg7tf/mango-min.jpg" alt="Shoes" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">Card Title</h2>
+              <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+              <div class="card-actions justify-end">
+                <button class="btn btn-primary">Buy Now</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+
+
+
+
+
+      </div>
+    </section>
 
 
 
@@ -144,9 +206,11 @@
           <div class="text-center py-10">
             <input type="text" placeholder="Your Name" class="w-full bg-white max-w-md rounded-md border-0 py-2.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 
            focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm" />
+
             <br>
             <input type="text" placeholder="Your Email Address" class="w-full my-3 bg-white max-w-md rounded-md border-0 py-2.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 
            focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm" />
+
             <div>
               <div class="w-full max-w-md mx-auto bg-white rounded-lg">
                 <label for="trees" class="sr-only">Number of Trees</label>
@@ -182,6 +246,7 @@
 
 
   </main>
+  <script src="./script.js"></script>
 </body>
 
 </html>
