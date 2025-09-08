@@ -1,3 +1,4 @@
+
 // load-Category-Container
 const categoryContainer = document.getElementById('categoryContainer');
 
@@ -5,6 +6,17 @@ const categoryContainer = document.getElementById('categoryContainer');
 // load-Plants-Container
 const loadPlantsContainer = document.getElementById('plantsContainer');
 
+// handle add to card
+loadPlantsContainer.addEventListener('click',(e) => {
+   
+ if(e.target.id === 'addCardContainer'){
+  console.log('click'); 
+  
+ }
+ 
+  
+   
+})
 
 // load-all-card
 const loadAllCard = document.getElementById('plantsContainer');
@@ -12,14 +24,14 @@ const loadAllCard = document.getElementById('plantsContainer');
 
 const loadCardAll = () => {
   fetch('https://openapi.programming-hero.com/api/plants')
-  .then(res => res.json())
-  .then(data => {
-    console.log(data.plants);
-    const plants = data.plants
-    plants.forEach(plant => {
-      console.log(plant);
-      
-      loadAllCard.innerHTML += ` 
+    .then(res => res.json())
+    .then(data => {
+
+      const plants = data.plants
+
+      plants.forEach(plant => {
+
+        loadAllCard.innerHTML += ` 
        <div class="max-w-sm bg-white rounded-2xl shadow-md    overflow-hidden">
             <!-- Image -->
             <img
@@ -43,8 +55,8 @@ const loadCardAll = () => {
               </div>
 
               <!-- Button -->
-              <button
-                class="w-full bg-[#15803D] text-white py-2 mt-4 rounded-full font-medium hover:bg-green-600 transition"
+              <button id="addCardContainer"
+                class="w-full cursor-pointer bg-[#15803D] text-white py-2 mt-4 rounded-full font-medium hover:bg-green-600 transition"
               >
                 Add to Cart
               </button>
@@ -52,9 +64,9 @@ const loadCardAll = () => {
           </div>
       
       `
-      
+
+      })
     })
-  })
 }
 
 loadCardAll();
@@ -71,22 +83,22 @@ const loadCategory = () => {
       categories.forEach(cat => {
         categoryContainer.innerHTML += `
         <li id="${cat.id}" class="py-2 pl-2 mt-2 hover:text-white hover:bg-[#15803D] rounded-sm cursor-pointer">${cat.category_name}</li>
-        `        
+        `
       })
     })
-    categoryContainer.addEventListener('click', (e) => {
-      const allLi = document.querySelectorAll('li')
-       
-      allLi.forEach(li => {
-        li.classList.remove('bg-[#15803D]' , 'text-white')
-      })
-      if(e.target.localName === 'li'){
-        // console.log(e.target.id);
-        
-        e.target.classList.add('bg-[#15803D]' , 'text-white')
-        loadPlants(e.target.id)
-      }
+  categoryContainer.addEventListener('click', (e) => {
+    const allLi = document.querySelectorAll('li')
+
+    allLi.forEach(li => {
+      li.classList.remove('bg-[#15803D]', 'text-white')
     })
+    if (e.target.localName === 'li') {
+      // console.log(e.target.id);
+
+      e.target.classList.add('bg-[#15803D]', 'text-white')
+      loadPlants(e.target.id)
+    }
+  })
 };
 
 
@@ -96,18 +108,18 @@ const loadCategory = () => {
 
 // load-All-Plants
 const loadPlants = (plantId) => {
- console.log(plantId);
+  console.log(plantId);
 
- 
+
   fetch(`https://openapi.programming-hero.com/api/category/${plantId}`)
-  .then(res => res.json())
-  .then(data => {
-    // console.log(data);
-    showAllPlants(data.plants)
-    
-    
-    
-  })
+    .then(res => res.json())
+    .then(data => {
+      // console.log(data);
+      showAllPlants(data.plants)
+
+
+
+    })
 
 };
 
@@ -116,18 +128,18 @@ const loadPlants = (plantId) => {
 // show-all-display
 const loadDisplayCard = () => {
   fetch('https://openapi.programming-hero.com/api/plants')
-  .then(res => res.json())
-  .then(data =>(data.plants)
-  )
+    .then(res => res.json())
+    .then(data => (data.plants)
+    )
 };
 
 
 
 
 // show-all-plants
- showAllPlants = (plants) => {
- loadPlantsContainer.innerHTML = '';
-  plants.forEach(plant => {       
+showAllPlants = (plants = []) => {
+  loadPlantsContainer.innerHTML = '';
+  plants.map(plant => {
     loadPlantsContainer.innerHTML += `
 
     <div class="max-w-sm bg-white rounded-2xl shadow-md h-[460px]">
@@ -154,7 +166,7 @@ const loadDisplayCard = () => {
     </div>
 
     <!-- Button -->
-     <button
+     <button id="button-click"
       class="w-full bg-[#15803D] text-white py-2 mt-4 rounded-full font-medium hover:bg-green-600 transition"
     >
       Add to Cart
@@ -166,10 +178,10 @@ const loadDisplayCard = () => {
 
     
     `
-    
+
 
   });
-  
+
 
 }
 
