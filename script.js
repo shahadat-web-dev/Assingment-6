@@ -6,6 +6,60 @@ const categoryContainer = document.getElementById('categoryContainer');
 const loadPlantsContainer = document.getElementById('plantsContainer');
 
 
+// load-all-card
+const loadAllCard = document.getElementById('plantsContainer');
+
+
+const loadCardAll = () => {
+  fetch('https://openapi.programming-hero.com/api/plants')
+  .then(res => res.json())
+  .then(data => {
+    console.log(data.plants);
+    const plants = data.plants
+    plants.forEach(plant => {
+      console.log(plant);
+      
+      loadAllCard.innerHTML += ` 
+       <div class="max-w-sm bg-white rounded-2xl shadow-md    overflow-hidden">
+            <!-- Image -->
+            <img
+              src="${plant.image}"
+              alt="Tree"
+              class="w-full h-48 object-cover"
+            />
+
+            <!-- Content -->
+            <div class="p-4">
+              <h2 class="text-lg font-semibold text-gray-800">${plant.name}</h2>
+              <p class="text-sm text-gray-600 mt-2">${plant.description}</p>
+
+              <!-- Category + Price -->
+              <div class="flex items-center justify-between mt-3">
+                <span
+                  class="px-3 py-1  bg-[#DCFCE7] text-xs rounded-full text-green-500">
+                  ${plant.category}
+                </span>
+                <span class="text-lg font-semibold text-gray-800">৳${plant.price}</span>
+              </div>
+
+              <!-- Button -->
+              <button
+                class="w-full bg-[#15803D] text-white py-2 mt-4 rounded-full font-medium hover:bg-green-600 transition"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+      
+      `
+      
+    })
+  })
+}
+
+loadCardAll();
+
+
 
 // load-Category
 const loadCategory = () => {
@@ -51,41 +105,79 @@ const loadPlants = (plantId) => {
     // console.log(data);
     showAllPlants(data.plants)
     
+    
+    
   })
 
 };
 
 
 
+// show-all-display
+const loadDisplayCard = () => {
+  fetch('https://openapi.programming-hero.com/api/plants')
+  .then(res => res.json())
+  .then(data =>(data.plants)
+  )
+};
+
+
+
+
 // show-all-plants
-const showAllPlants = (plants) => {
-   
+ showAllPlants = (plants) => {
  loadPlantsContainer.innerHTML = '';
-  plants.map(plant => {       
+  plants.forEach(plant => {       
     loadPlantsContainer.innerHTML += `
 
-     <div class="bg-white max-h-[400px] p-4 rounded-md">
-            <img class="w-full h-48 object-cover rounded-t-md" src="${plant.image}"/>
-            <h2 class="card-title font-semibold pt-3">${plant.name}</h2>
-            <p class="text-sm ">${plant.description}</p>
-            <div class="flex items-center justify-between mt-2">
-              <h3 class="text-sm bg-[#DCFCE7] py-1 px-3 rounded-full text-[#15803D] font-medium">${plant.category}</h3>
-              <h4><span class="text-sm font-semibold">৳${plant.price}</span></h4>
-            </div>
-            <div class="text-center ">
-              <button class="bg-[#15803D] w-full rounded-full text-white py-2 mt-3 mb-3">Add to Cart</button>
-            </div>
-          </div>
+    <div class="max-w-sm bg-white rounded-2xl shadow-md h-[460px]">
+  <!-- Image -->
+  <img
+    src="${plant.image}"
+    alt="Tree"
+    class="w-full h-48 object-cover rounded-t-2xl "
+  />
+
+  <!-- Content -->
+  <div class="p-4">
+    <h2 class="text-lg font-semibold text-gray-800">${plant.name}</h2>
+    <p class="text-sm text-gray-600 mt-2">${plant.description}</p>
+
+    <!-- Category + Price -->
+    <div class="flex items-center justify-between mt-3">
+      <span
+        class="px-3 py-1 bg-[#DCFCE7] text-xs rounded-full text-green-500"
+      >
+        ${plant.category}
+      </span>
+      <span class="text-lg font-semibold text-gray-800">৳${plant.price}</span>
+    </div>
+
+    <!-- Button -->
+     <button
+      class="w-full bg-[#15803D] text-white py-2 mt-4 rounded-full font-medium hover:bg-green-600 transition"
+    >
+      Add to Cart
+    </button>
+   
+  </div>
+</div>
+
 
     
     `
     
 
-  })
+  });
   
 
 }
 
 
-
+loadDisplayCard()
 loadCategory();
+showAllPlants();
+
+
+
+
