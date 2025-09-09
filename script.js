@@ -1,247 +1,81 @@
-// clear cart
+// DOM Elements
+const loadPlantsContainer = document.getElementById("plantsContainer");
+const yourCartContainer = document.getElementById("yourCartContainer");
+const cartTotal = document.getElementById("cartTotal");
+let total = 0;
 
-// load-Category-Container
-const categoryContainer = document.getElementById('categoryContainer');
-
-// load-Plants-Container
-const loadPlantsContainer = document.getElementById('plantsContainer');
-
-// 
-const addContainer = document.getElementById('addCardContainer');
-
-const yourCartContainer = document.getElementById('your-cart');
-
-// total price element
-const cartPriceElement = document.getElementById('price'); 
-let cartPrice = 0; // total হিসাব রাখার জন্য আলাদা ভ্যারিয়েবল
-
-// function: total price update
-function updateCartPrice(amount) {
-  cartPrice += amount;
-  cartPriceElement.innerText = cartPrice; // শুধু সংখ্যা update হবে
+// ✅ Toast Function
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  const toastMsg = document.getElementById("toast-msg");
+  toastMsg.innerText = message;
+  toast.classList.remove("hidden");
+  setTimeout(() => toast.classList.add("hidden"), 2000);
 }
 
-// function: remove price update
-function removeCartPrice(amount) {
-  cartPrice -= amount;
-  if (cartPrice < 0) cartPrice = 0;
-  cartPriceElement.innerText = cartPrice;
+// ✅ Loader Functions
+function showLoader() {
+  document.getElementById("loader").classList.remove("hidden");
+}
+function hideLoader() {
+  document.getElementById("loader").classList.add("hidden");
 }
 
-// handle add to cart (for both all plants + category plants)
-loadPlantsContainer.addEventListener('click',(e) => {
-  if(e.target.id === 'addCardContainer' || e.target.id === 'button-click'){
+// ✅ Add to Cart Handler
+loadPlantsContainer.addEventListener("click", (e) => {
+  if (e.target.tagName === "BUTTON") {
+    const card = e.target.closest("div");
+    const title = card.querySelector("h3, h2")?.innerText || "Plant";
+    const price = parseFloat(card.querySelector("p span")?.innerText || "0");
 
-    // card title
-    const title = e.target.parentNode.children[0].innerText;
+    // ✅ Toast instead of alert
+    showToast(`${title} has been added to the cart.`);
 
-     alert(`${title} has been added to the cart.`)  
-
-    // card price (handle both cases)
-    let priceText = "";
-    const priceElement = e.target.parentNode.querySelector("p span, span.text-lg.font-semibold.text-gray-800");
-    if(priceElement){
-      priceText = priceElement.innerText;
-    }
-
-    // remove ৳ sign & convert to number
-    const price = parseFloat(priceText.replace(/[^\d.]/g, "")) || 0;
-
-    // cart UI add
+    // Add cart item
     const cartItem = document.createElement("div");
-    cartItem.className = "flex items-center justify-between bg-[#F0FDF4] p-4 rounded-lg mt-2";
+    cartItem.className =
+      "flex items-center justify-between bg-green-50 p-3 rounded-lg";
     cartItem.innerHTML = `
-        <div>
-          <h2 class="font-semibold text-lg">${title}</h2>
-          <h3 class="text-[#879395] mt-1">৳${price}</h3>
-        </div>
-        <div class="clear-btn cursor-pointer">❌</div> 
+      <div>
+        <h3 class="font-semibold">${title}</h3>
+        <p class="text-gray-600">৳${price}</p>
+      </div>
+      <button class="clear-btn text-red-500 font-bold">✖</button>
     `;
 
-    // remove button event
+    // Remove item event
     cartItem.querySelector(".clear-btn").addEventListener("click", () => {
       cartItem.remove();
-      removeCartPrice(price);
+      total -= price;
+      cartTotal.innerText = total;
+      showToast(`${title} has been removed from the cart.`);
     });
 
     yourCartContainer.appendChild(cartItem);
 
-    // total price update
-    updateCartPrice(price);
+    // Update total
+    total += price;
+    cartTotal.innerText = total;
   }
-})
+});
 
-// load-all-card
-const loadAllCard = document.getElementById('plantsContainer');
+// ✅ Category Click Handler
+document.getElementById("categoryContainer").addEventListener("click", (e) => {
+  if (e.target.classList.contains("category-btn")) {
+    showLoader();
 
-const loadCardAll = () => {
-  fetch('https://openapi.programming-hero.com/api/plants')
-    .then(res => res.json())
-    .then(data => {
-      const plants = data.plants
-      plants.forEach(plant => {
-        loadAllCard.innerHTML += ` 
-       <div  class="max-w-sm bg-white rounded-2xl shadow-md overflow-hidden">
-            <!-- Image -->
-            <img
-              src="${plant.image}"
-              alt="Tree"
-              class="w-full h-48 object-cover"
-            />
+    // Fake API delay (2 sec)
+    setTimeout(() => {
+      hideLoader();
 
-            <!-- Content -->
-            <div id="${plant.id}" class="p-4">
-              <h2  onClick="loadPlantsDetails(${plant.id})" class="text-lg card-title font-semibold cursor-pointer text-gray-800">${plant.name}</h2>
-              <p class="text-sm text-gray-600 mt-2">${plant.description}</p>
-
-              <!-- Category + Price -->
-              <div class="flex items-center justify-between mt-3">
-                <span
-                  class="px-3 py-1 bg-[#DCFCE7] text-xs rounded-full text-green-500">
-                  ${plant.category}
-                </span>
-                <p class="text-lg font-semibold text-gray-800">৳<span>${plant.price}</span></p>
-              </div>
-
-              <!-- Button -->
-              <button id="addCardContainer"
-                class="w-full cursor-pointer bg-[#15803D] text-white py-2 mt-4 rounded-full font-medium hover:bg-green-600 transition"
-              >
-                Add to Cart
-              </button>
-            </div>
-          </div>
-      `
-      })
-    })
-}
-loadCardAll();
-
-// load-Category
-const loadCategory = () => {
-  fetch('https://openapi.programming-hero.com/api/categories')
-    .then(res => res.json())
-    .then(data => {
-      const categories = data.categories
-      categories.forEach(cat => {
-        categoryContainer.innerHTML += `
-        <li id="${cat.id}" class="py-2 pl-2 mt-2 hover:text-white hover:bg-[#09AC4B] rounded-sm cursor-pointer">${cat.category_name}</li>
-        `
-      })
-    })
-  categoryContainer.addEventListener('click', (e) => {
-    const allLi = document.querySelectorAll('li')
-
-    allLi.forEach(li => {
-      li.classList.remove('bg-[#15803D]', 'text-white')
-    })
-    if (e.target.localName === 'li') {
-      e.target.classList.add('bg-[#15803D]', 'text-white')
-      loadPlants(e.target.id)
-    }
-  })
-};
-
-// load-All-Plants
-const loadPlants = (plantId) => {
-  fetch(`https://openapi.programming-hero.com/api/category/${plantId}`)
-    .then(res => res.json())
-    .then(data => {
-      showAllPlants(data.plants)
-    })
-};
-
-// show-all-display
-const loadDisplayCard = () => {
-  fetch('https://openapi.programming-hero.com/api/plants')
-    .then(res => res.json())
-    .then(data => (data.plants))
-};
-
-// show-all-plants
-showAllPlants = (plants = []) => {
-  loadPlantsContainer.innerHTML = '';
-  plants.map(plant => {
-    loadPlantsContainer.innerHTML += `
-    <div class="max-w-sm bg-white rounded-2xl shadow-md h-[460px]">
-      <!-- Image -->
-      <img
-        src="${plant.image}"
-        alt="Tree"
-        class="w-full h-48 object-cover rounded-t-2xl "
-      />
-
-      <!-- Content -->
-      <div class="p-4">
-        <h2 onClick="loadPlantsDetails(${plant.id})" class="text-lg font-semibold cursor-pointer text-gray-800">${plant.name}</h2>
-        <p class="text-sm cursor-pointer text-gray-600 mt-2">${plant.description}</p>
-
-        <!-- Category + Price -->
-        <div class="flex items-center justify-between mt-3">
-          <span
-            class="px-3 py-1 bg-[#DCFCE7] text-xs rounded-full text-green-500">
-            ${plant.category}
-          </span>
-          <span class="text-lg font-semibold text-gray-800">৳${plant.price}</span>
+      // Example: Load category-specific card
+      loadPlantsContainer.innerHTML = `
+        <div class="border bg-white p-4 rounded-xl shadow">
+          <h3 class="font-semibold text-lg">${e.target.innerText} Plant</h3>
+          <p class="text-gray-600">৳<span>500</span></p>
+          <button class="mt-3 btn btn-sm bg-green-600 text-white">Add to Cart</button>
         </div>
-
-        <!-- Button -->
-        <button id="button-click"
-          class="w-full bg-[#15803D] text-white py-2 mt-4 rounded-full font-medium hover:bg-green-600 transition"
-        >
-          Add to Cart
-        </button>
-      </div>
-    </div>
-    `
-  });
-};
-
-
-
-
-
-
-
-
-
-loadDisplayCard()
-loadCategory();
-showAllPlants();
-
-
-//Load Plants Detail............................
-
-const loadPlantsDetails = async(id)=>{
-  const url = `https://openapi.programming-hero.com/api/plant/${id}`
-  // console.log(url);
-  const res = await fetch(url);
-  const details = await res.json();
-  displayPlantDetails(details.plants);
-}
-const displayPlantDetails=(plant) =>{
-  console.log(plant);
-  const detailsBox = document.getElementById("details-container");
-  detailsBox.innerHTML = `
-  
-  <div class="p-2">
-      <h3 class="text-xl font-bold">${plant.name}</h3>
-    </div>
-
-    <!-- Modal Image -->
-    <div class="w-full p-2">
-      <img src="${plant.image}" alt="Banyan Tree" class="w-full h-56 object-cover rounded-xl">
-    </div>
-
-    <!-- Modal Content -->
-    <div class="p-2">
-      <p class="font-semibold"><span class="font-bold">Category:</span>${plant.category}</p>
-      <p class="font-semibold mt-2"><span class="font-bold">Price:</span> ৳${plant.price}</p>
-      <p class="mt-2"><span class="font-bold">Description:</span> ${plant.description}</p>
-    </div>
-  
-  
-  `
-  document.getElementById("plant_modal").showModal();
-  
-}
+      `;
+    }, 2000);
+  }
+});
