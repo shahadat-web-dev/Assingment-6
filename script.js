@@ -6,17 +6,58 @@ const categoryContainer = document.getElementById('categoryContainer');
 // load-Plants-Container
 const loadPlantsContainer = document.getElementById('plantsContainer');
 
+// 
+const addContainer = document.getElementById('addCardContainer');
+
+const yourCartContainer = document.getElementById('your-cart');
+
+const totalPrice = document.getElementById('total-price');
+const price = document.getElementById('price').innerText;
+console.log( Number(price));
+
+
+
+
+
+
+ 
+
 // handle add to card
 loadPlantsContainer.addEventListener('click',(e) => {
-   
+  const title = e.target.parentNode.children[0].innerText;
+  const price = e.target.parentNode.children[2].children[1].innerText;
+
+  
+  
+  
+// alert(`${title} has been added to the cart.`)
+ 
+
+
+  
+
  if(e.target.id === 'addCardContainer'){
-  console.log('click'); 
+
+   yourCartContainer.innerHTML += `
+       
+
+ <div  class="flex items-center justify-between bg-[#F0FDF4] p-4 rounded-lg mt-2">
+              <div>
+                <h2 class="font-semibold text-lg">${title}</h2>
+                <h3 class="text-[#879395] mt-1">${price}</h3>
+              </div>
+              <div id="clear"><i class="fa-solid fa-xmark text-[#8C8C8C]"></i></div>              
+            </div>
+ 
+ `;
   
  }
- 
-  
-   
+
 })
+
+
+ 
+
 
 // load-all-card
 const loadAllCard = document.getElementById('plantsContainer');
@@ -30,9 +71,11 @@ const loadCardAll = () => {
       const plants = data.plants
 
       plants.forEach(plant => {
+        // console.log(plant);
+        
 
         loadAllCard.innerHTML += ` 
-       <div class="max-w-sm bg-white rounded-2xl shadow-md    overflow-hidden">
+       <div  class="max-w-sm bg-white rounded-2xl shadow-md    overflow-hidden">
             <!-- Image -->
             <img
               src="${plant.image}"
@@ -41,8 +84,8 @@ const loadCardAll = () => {
             />
 
             <!-- Content -->
-            <div class="p-4">
-              <h2 class="text-lg font-semibold text-gray-800">${plant.name}</h2>
+            <div id="${plant.id}" class="p-4">
+              <h2 class="text-lg card-title font-semibold text-gray-800">${plant.name}</h2>
               <p class="text-sm text-gray-600 mt-2">${plant.description}</p>
 
               <!-- Category + Price -->
