@@ -55,7 +55,7 @@ loadPlantsContainer.addEventListener('click',(e) => {
           <h2 class="font-semibold text-lg">${title}</h2>
           <h3 class="text-[#879395] mt-1">৳${price}</h3>
         </div>
-        <div class="clear-btn cursor-pointer"><i class="fa-solid fa-xmark text-[#8C8C8C]"></i></div> 
+        <div class="clear-btn cursor-pointer">❌</div> 
     `;
 
     // remove button event
@@ -91,7 +91,7 @@ const loadCardAll = () => {
 
             <!-- Content -->
             <div id="${plant.id}" class="p-4">
-              <h2 class="text-lg card-title font-semibold text-gray-800">${plant.name}</h2>
+              <h2  onClick="loadPlantsDetails(${plant.id})" class="text-lg card-title font-semibold cursor-pointer text-gray-800">${plant.name}</h2>
               <p class="text-sm text-gray-600 mt-2">${plant.description}</p>
 
               <!-- Category + Price -->
@@ -125,7 +125,7 @@ const loadCategory = () => {
       const categories = data.categories
       categories.forEach(cat => {
         categoryContainer.innerHTML += `
-        <li id="${cat.id}" class="py-2 pl-2 mt-2 hover:text-white hover:bg-[#15803D] rounded-sm cursor-pointer">${cat.category_name}</li>
+        <li id="${cat.id}" class="py-2 pl-2 mt-2 hover:text-white hover:bg-[#09AC4B] rounded-sm cursor-pointer">${cat.category_name}</li>
         `
       })
     })
@@ -173,8 +173,8 @@ showAllPlants = (plants = []) => {
 
       <!-- Content -->
       <div class="p-4">
-        <h2 class="text-lg font-semibold text-gray-800">${plant.name}</h2>
-        <p class="text-sm text-gray-600 mt-2">${plant.description}</p>
+        <h2 onClick="loadPlantsDetails(${plant.id})" class="text-lg font-semibold cursor-pointer text-gray-800">${plant.name}</h2>
+        <p class="text-sm cursor-pointer text-gray-600 mt-2">${plant.description}</p>
 
         <!-- Category + Price -->
         <div class="flex items-center justify-between mt-3">
@@ -195,8 +195,53 @@ showAllPlants = (plants = []) => {
     </div>
     `
   });
-}
+};
+
+
+
+
+
+
+
+
 
 loadDisplayCard()
 loadCategory();
 showAllPlants();
+
+
+//Load Plants Detail............................
+
+const loadPlantsDetails = async(id)=>{
+  const url = `https://openapi.programming-hero.com/api/plant/${id}`
+  // console.log(url);
+  const res = await fetch(url);
+  const details = await res.json();
+  displayPlantDetails(details.plants);
+}
+const displayPlantDetails=(plant) =>{
+  console.log(plant);
+  const detailsBox = document.getElementById("details-container");
+  detailsBox.innerHTML = `
+  
+  <div class="p-2">
+      <h3 class="text-xl font-bold">${plant.name}</h3>
+    </div>
+
+    <!-- Modal Image -->
+    <div class="w-full p-2">
+      <img src="${plant.image}" alt="Banyan Tree" class="w-full h-56 object-cover rounded-xl">
+    </div>
+
+    <!-- Modal Content -->
+    <div class="p-2">
+      <p class="font-semibold"><span class="font-bold">Category:</span>${plant.category}</p>
+      <p class="font-semibold mt-2"><span class="font-bold">Price:</span> ৳${plant.price}</p>
+      <p class="mt-2"><span class="font-bold">Description:</span> ${plant.description}</p>
+    </div>
+  
+  
+  `
+  document.getElementById("plant_modal").showModal();
+  
+}
