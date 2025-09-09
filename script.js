@@ -1,3 +1,5 @@
+// clear cart
+
 
 // load-Category-Container
 const categoryContainer = document.getElementById('categoryContainer');
@@ -12,56 +14,45 @@ const addContainer = document.getElementById('addCardContainer');
 const yourCartContainer = document.getElementById('your-cart');
 
 const totalPrice = document.getElementById('total-price');
-const price = document.getElementById('price').innerText;
-console.log( Number(price));
+const cartPrice = document.getElementById('price').innerText;
 
 
+// =====================
+// Update Cart Price Function
+// =====================
+function updateCartPrice(amount) {
+  let current = Number(document.getElementById('price').innerText);
+  let newTotal = current + Number(amount);
+  document.getElementById('price').innerText = newTotal;
+}
 
 
-
-
- 
 
 // handle add to card
 loadPlantsContainer.addEventListener('click',(e) => {
   const title = e.target.parentNode.children[0].innerText;
-  const price = e.target.parentNode.children[2].children[1].innerText;
+  const price = e.target.parentNode.children[2].children[1].children[0].innerText;
 
-  
-  
-  
-// alert(`${title} has been added to the cart.`)
- 
+  if(e.target.id === 'addCardContainer'){
+    yourCartContainer.innerHTML += `
+      <div  class="flex items-center justify-between bg-[#F0FDF4] p-4 rounded-lg mt-2">
+        <div>
+          <h2 class="font-semibold text-lg">${title}</h2>
+          <h3 class="text-[#879395] mt-1">${price}</h3>
+        </div>
+        <div id="clear"><i class="fa-solid fa-xmark text-[#8C8C8C]"></i></div>              
+      </div>
+    `; 
 
-
-  
-
- if(e.target.id === 'addCardContainer'){
-
-   yourCartContainer.innerHTML += `
-       
-
- <div  class="flex items-center justify-between bg-[#F0FDF4] p-4 rounded-lg mt-2">
-              <div>
-                <h2 class="font-semibold text-lg">${title}</h2>
-                <h3 class="text-[#879395] mt-1">${price}</h3>
-              </div>
-              <div id="clear"><i class="fa-solid fa-xmark text-[#8C8C8C]"></i></div>              
-            </div>
- 
- `;
-  
- }
-
+    // cart price update
+    updateCartPrice(price);
+  }
 })
 
-
- 
 
 
 // load-all-card
 const loadAllCard = document.getElementById('plantsContainer');
-
 
 const loadCardAll = () => {
   fetch('https://openapi.programming-hero.com/api/plants')
@@ -71,9 +62,6 @@ const loadCardAll = () => {
       const plants = data.plants
 
       plants.forEach(plant => {
-        // console.log(plant);
-        
-
         loadAllCard.innerHTML += ` 
        <div  class="max-w-sm bg-white rounded-2xl shadow-md    overflow-hidden">
             <!-- Image -->
@@ -94,7 +82,9 @@ const loadCardAll = () => {
                   class="px-3 py-1  bg-[#DCFCE7] text-xs rounded-full text-green-500">
                   ${plant.category}
                 </span>
-                <span class="text-lg font-semibold text-gray-800">৳${plant.price}</span>
+               
+                <p class="text-lg font-semibold text-gray-800">৳<span>${plant.price}</span></p>
+
               </div>
 
               <!-- Button -->
@@ -107,7 +97,6 @@ const loadCardAll = () => {
           </div>
       
       `
-
       })
     })
 }
@@ -115,13 +104,11 @@ const loadCardAll = () => {
 loadCardAll();
 
 
-
 // load-Category
 const loadCategory = () => {
   fetch('https://openapi.programming-hero.com/api/categories')
     .then(res => res.json())
     .then(data => {
-      // console.log(data.categories);
       const categories = data.categories
       categories.forEach(cat => {
         categoryContainer.innerHTML += `
@@ -136,8 +123,6 @@ const loadCategory = () => {
       li.classList.remove('bg-[#15803D]', 'text-white')
     })
     if (e.target.localName === 'li') {
-      // console.log(e.target.id);
-
       e.target.classList.add('bg-[#15803D]', 'text-white')
       loadPlants(e.target.id)
     }
@@ -146,24 +131,13 @@ const loadCategory = () => {
 
 
 
-
-
-
 // load-All-Plants
 const loadPlants = (plantId) => {
-  console.log(plantId);
-
-
   fetch(`https://openapi.programming-hero.com/api/category/${plantId}`)
     .then(res => res.json())
     .then(data => {
-      // console.log(data);
       showAllPlants(data.plants)
-
-
-
     })
-
 };
 
 
@@ -172,10 +146,8 @@ const loadPlants = (plantId) => {
 const loadDisplayCard = () => {
   fetch('https://openapi.programming-hero.com/api/plants')
     .then(res => res.json())
-    .then(data => (data.plants)
-    )
+    .then(data => (data.plants))
 };
-
 
 
 
@@ -184,55 +156,42 @@ showAllPlants = (plants = []) => {
   loadPlantsContainer.innerHTML = '';
   plants.map(plant => {
     loadPlantsContainer.innerHTML += `
-
     <div class="max-w-sm bg-white rounded-2xl shadow-md h-[460px]">
-  <!-- Image -->
-  <img
-    src="${plant.image}"
-    alt="Tree"
-    class="w-full h-48 object-cover rounded-t-2xl "
-  />
+      <!-- Image -->
+      <img
+        src="${plant.image}"
+        alt="Tree"
+        class="w-full h-48 object-cover rounded-t-2xl "
+      />
 
-  <!-- Content -->
-  <div class="p-4">
-    <h2 class="text-lg font-semibold text-gray-800">${plant.name}</h2>
-    <p class="text-sm text-gray-600 mt-2">${plant.description}</p>
+      <!-- Content -->
+      <div class="p-4">
+        <h2 class="text-lg font-semibold text-gray-800">${plant.name}</h2>
+        <p class="text-sm text-gray-600 mt-2">${plant.description}</p>
 
-    <!-- Category + Price -->
-    <div class="flex items-center justify-between mt-3">
-      <span
-        class="px-3 py-1 bg-[#DCFCE7] text-xs rounded-full text-green-500"
-      >
-        ${plant.category}
-      </span>
-      <span class="text-lg font-semibold text-gray-800">৳${plant.price}</span>
+        <!-- Category + Price -->
+        <div class="flex items-center justify-between mt-3">
+          <span
+            class="px-3 py-1 bg-[#DCFCE7] text-xs rounded-full text-green-500"
+          >
+            ${plant.category}
+          </span>
+          <span class="text-lg font-semibold text-gray-800">৳${plant.price}</span>
+        </div>
+
+        <!-- Button -->
+        <button id="button-click"
+          class="w-full bg-[#15803D] text-white py-2 mt-4 rounded-full font-medium hover:bg-green-600 transition"
+        >
+          Add to Cart
+        </button>
+      </div>
     </div>
-
-    <!-- Button -->
-     <button id="button-click"
-      class="w-full bg-[#15803D] text-white py-2 mt-4 rounded-full font-medium hover:bg-green-600 transition"
-    >
-      Add to Cart
-    </button>
-   
-  </div>
-</div>
-
-
-    
     `
-
-
   });
-
-
 }
 
 
 loadDisplayCard()
 loadCategory();
 showAllPlants();
-
-
-
-
