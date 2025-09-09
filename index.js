@@ -1,3 +1,23 @@
+const manageSpiner = (status) => {
+  if(status === true){
+    document.getElementById('spiner').classList.remove('hidden');
+    document.getElementById('cardContainer').classList.add('hidden');
+
+  }
+  else{
+    document.getElementById('cardContainer').classList.remove('hidden');
+    document.getElementById('spiner').classList.add('hidden');
+  }
+
+};
+
+
+
+
+
+
+
+
 const catagoryContainer = document.getElementById("catagoriesContainer");
 const mobileCategories = document.getElementById("mobileCategories");
 const loadAllCard = document.getElementById("cardContainer");
@@ -107,7 +127,7 @@ loadCardAll();
 
 //display card......................................
 const loadPlants = (id) => {
-  
+  manageSpiner(true);
   const url = `https://openapi.programming-hero.com/api/category/${id}`;
   fetch(url)
     .then((res) => res.json())
@@ -158,6 +178,7 @@ const displayCard = (plants) => {
     `;
     cardContainer.append(card);
   });
+  manageSpiner(false)
 };
 
 // Categories.........................................
