@@ -18,16 +18,18 @@ yourCart.addEventListener("click", (e) => {
 
 //Event Listener
 cardContainer.addEventListener("click", (e) => {
+  
   const title = e.target.parentNode.children[0].innerText;
   const price = e.target.parentNode.children[2].children[1].innerText;
-
+     
   if (e.target.id === "addCardContainer") {
+    alert(`${title} has been added to the cart`)
     yourCart.innerHTML += `<div class="bg-[#F0FDF4] p-4 mt-2 rounded-lg flex items-center justify-between ">
               <div>
                 <h1 class="text-[#1F2937] font-semibold ">${title}</h1>
               <p class=" text-[#879395] mt-1">${price} x 1</p>
               </div>
-              <i class="fa-solid fa-xmark text-[#8C8C8C]"></i>
+              <i class="fa-solid fa-xmark cursor-pointer text-[rgb(206,12,12)]"></i>
             </div>`
 
     
@@ -214,6 +216,7 @@ const loadPlantsDetails = async(id)=>{
   displayPlantDetails(details.plants);
 }
 const displayPlantDetails=(plant) =>{
+  
   console.log(plant);
   const detailsBox = document.getElementById("details-container");
   detailsBox.innerHTML = `
